@@ -1,26 +1,38 @@
-function Explosion(game, x, y, which) {
+function Explosion(game, x, y, which, size) 
+{
   Entity.call(this, game, x, y);
   var sheet = ASSET_MANAGER.getAsset('img/explosions.png');
-  if (which) {
+  if (which) 
+  {
     var exp = which;
   }
-  else {
-    var exp = Math.floor(Math.random()*8);
+  else 
+  {
+    var exp = Math.floor(Math.random() * 8);
   }
-  //sprite-sheet, width,height,heightoffset,duration,?loop
-  this.animation = new Animation(sheet, 64, 64, exp*64, 0.04);
+  this.size = size;
+  //sprite-sheet, width, height, heightoffset, duration, ?loop
+  this.animation = new Animation(sheet, 64, 64, 64*exp, 0.04);
 }
-obj.extend(Explosion,Entity);
+obj.extend(Explosion, Entity);
 
-Explosion.prototype.update = function() {
-  if (this.animation.isDone()) {
+Explosion.prototype.update = function() 
+{
+  if (this.animation.isDone()) 
+  {
     this.removeFromWorld = true;
   }
   Entity.prototype.update.call(this);
 }
 
-Explosion.prototype.draw = function(ctx) {
-  this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
+Explosion.prototype.draw = function(ctx) 
+{
+  this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.size);
   Entity.prototype.draw.call(this, ctx);
+}
+
+Explosion.prototype.paused = function()
+{
+	this.animation.paused(this.game.clockTick);
 }
 
